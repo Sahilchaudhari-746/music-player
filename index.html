@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://kit.fontawesome.com/89a8b4c4dc.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="index.js">
+    <title>Playlist</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            background-image: url('E:/code clause/music player/back.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        #playlist {
+            margin-left: 2rem;
+            overflow-y: auto;
+            margin-top: 1rem;
+            width: 100%;
+            /* Adjusted width for responsiveness */
+            max-width: 300px;
+            /* Maximum width for larger screens */
+            background-color: transparent;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 5rem;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 3rem;
+        }
+
+        #playlist ::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        #playlist span {
+            font-size: 18px;
+        }
+
+        #musicPlayer {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .song-item {
+            border-radius: 12px;
+            border: 2px solid white;
+            cursor: pointer;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            border-left: none;
+            border-top: none;
+            border-right: none;
+            text-align: center;
+            box-shadow: 0px 17px 10px 0px #000000;
+            align-items: center;
+        }
+
+        .song-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .playing {
+            color: white;
+            font-weight: 900;
+            background-color: transparent;
+            border: 2px solid white;
+            box-shadow: -1px 3px 10px 1px #ffffff;
+            border-radius: 10px;
+            padding: 12px;
+            width: 100%;
+            max-width: 15.5rem;
+            background-image: url('E:/code clause/music player/music.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .controlbtn1 {
+            text-align: center;
+            padding: 10px;
+            margin-left: 5%;
+        }
+
+        .controlbtn1 button {
+            margin: 5px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: black;
+            border: 2px solid white;
+            color: #fff;
+            margin-right: 3%;
+            border-radius: 50%;
+            width: 8%;
+        }
+
+        .controlbtn {
+            text-align: center;
+            padding: 10px;
+            margin-left: 5%;
+            /* Adjusted margin for responsiveness */
+        }
+
+        .controlbtn button {
+            margin: 5px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: black;
+            border: 2px solid white;
+            color: #fff;
+            margin-right: 3%;
+            border-radius: 50%;
+            width: 8%;
+        }
+
+        #songDetails p {
+            color: white;
+            font-size: 22px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        #songDetails {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #songDetails img {
+            width: 100%;
+            /* Adjusted width for responsiveness */
+            max-width: 20rem;
+            /* Maximum width for larger screens */
+            box-shadow: -1px 3px 34px 7px #ffffff;
+            margin-right: 10px;
+            margin-left: 26%;
+            border-radius: 11px;
+        }
+
+        #playButton {
+            display: none;
+        }
+
+        .notification {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .controlbtn1 {
+            display: none;
+        }
+
+        /* WebKit-based browsers (Chrome, Safari) */
+        ::-webkit-scrollbar {
+            width: 8px;
+            /* Adjust the width as needed */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #888;
+            /* Color of the thumb (drag handle) */
+            border-radius: 4px;
+            /* Rounded corners */
+        }
+
+        /* Firefox */
+        body {
+            scrollbar-width: thin;
+            /* "thin" represents a reduced width scrollbar */
+        }
+
+        body::-webkit-scrollbar {
+            width: 8px;
+            /* Adjust the width as needed */
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background-color: #888;
+            /* Color of the thumb (drag handle) */
+            border-radius: 4px;
+            /* Rounded corners */
+        }
+
+        .name {
+            color: white;
+            font-size: 22px;
+            font-weight: 600;
+            position: absolute;
+            margin-left: 3%;
+            margin-top: -1rem;
+            background: black;
+            border: 2px solid white;
+            opacity: 0.7;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            box-shadow: 0px 6px 8px 4px #ffffff;
+            border-radius: 7px;
+        }
+
+        /* Media Queries for responsiveness */
+        @media screen and (max-width: 768px) {
+            .controlbtn1 {
+                display: flex;
+            }
+
+            .controlbtn {
+                display: none;
+            }
+
+
+            button {
+                margin-right: 1%;
+            }
+
+            #songDetails img {
+                margin-left: 12%;
+            }
+
+            audio {
+                display: none;
+            }
+        }
+
+        @media screen and (max-width: 540px) {
+
+            #songDetails img {
+                margin-left: 10%;
+            }
+
+            audio {
+                display: block;
+            }
+
+            .controlbtn1 button {
+                width: 14%;
+            }
+        }
+
+        @media screen and (max-width: 500px) {
+            #songDetails img {
+                margin-left: 5%;
+            }
+        }
+
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        @media (max-width: 750px) {
+            #playlist {
+                display: none;
+            }
+
+            .menu-icon {
+                display: block;
+            }
+
+            .controlbtn1 button {
+                width: 18%;
+            }
+
+            .controlbtn1 {
+                margin-left: 12%;
+            }
+
+        }
+
+        @media (max-width: 759px) {
+            .controlbtn1 button {
+                width: 18%;
+            }
+
+        }
+
+        #closer {
+            display: none;
+        }
+
+        #downplaylist {
+            position: absolute;
+            top: 0;
+            left: 50px;
+            background-color: black;
+            opacity: 0.9;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            max-height: 326px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease, transform 0.7s ease;
+            transform-origin: top;
+            transform: translateY(-125%);
+            width: 80%;
+            /* Set width as a percentage of viewport width */
+            max-width: 600px;
+            /* Set maximum width for larger screens */
+            height: 50%;
+            /* Set height as a percentage of viewport height */
+        }
+
+        #downplaylist.show {
+            transform: translateY(0);
+            /* Set translateY to 0 to show the playlist */
+        }
+
+        #bar {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: 24px;
+            /* Adjust the font size as needed */
+            color: #fff;
+            /* Set the color to your desired color */
+        }
+
+        #bar i {
+            display: block;
+            width: 24px;
+            /* Adjust the width as needed */
+            height: 2px;
+            /* Height of each line */
+
+            margin: 6px 0;
+            /* Adjust the margin to center the lines vertically */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="notification" class="notification"></div>
+
+    <div id="playlist"></div>
+
+    <div id="musicPlayer">
+        <!-- <audio id="audioPlayer" controls></audio> -->
+        <br>
+        <div id="songDetails"></div>
+        <div class="controlbtn" id="control">
+            <button onclick="prevSong('playlist')"><i class="fa-solid fa-backward"></i></button>
+
+            <button id="playButton" onclick="togglePlayPause()"><i class="fa-solid fa-play"></i></button>
+            <button id="pauseButton" onclick="togglePlayPause()"><i class="fa-solid fa-pause"></i></button>
+
+            <button onclick="nextSong('playlist')"><i class="fa-solid fa-forward"></i></button>
+        </div>
+        <div class="controlbtn1">
+            <button onclick="prevSong('downplaylist')"><i class="fa-solid fa-backward"></i></button>
+            <button id="playButton1" onclick="togglePlayPause()"><i class="fa-solid fa-play"></i></button>
+            <button id="pauseButton1" onclick="togglePlayPause()"><i class="fa-solid fa-pause"></i></button>
+
+            <button onclick="nextSong('downplaylist')"><i class="fa-solid fa-forward"></i></button>
+
+        </div>
+        <audio id="audioPlayer" controls></audio>
+        <div class="menu-icon">
+            <button id="bar" onclick="togglePlaylist()"><i class="fa-solid fa-bars"></i></button>
+        </div>
+        <div id="downplaylist">
+
+        </div>
+
+        <script>
+            const playlistData = [
+                { name: 'Sidhu moose wala', src: 'E:/code clause/music player/album/295_(Official_Audio)__Sidhu_Moose_Wala__The_Kidd__Moosetape(48k).mp3', image: 'E:/code clause/music player/Pictures/1.jpg' },
+                { name: 'Arjit Singh', src: 'E:/code clause/music player/album/Arijit_Singh_Romantic_Mashup_2021__Chillout_Remix__Bicky_official(48k).mp3', image: 'E:/code clause/music player/Pictures/2.jpg' },
+                { name: 'Amplifier', src: 'E:/code clause/music player/album/Amplifier_X_Babu_Rao_(Party_mix)(48k).mp3', image: 'E:/code clause/music player/Pictures/3.jpg' },
+                { name: 'Bhula dunga', src: 'E:/code clause/music player/album/Bhula_Dunga_x_Dil_Todne_Se_Pehle__Heart_Chillout_Mix__Darshan_Raval,_Jass_Manak__BICKY_OFFICIAL(48k).mp3', image: 'E:/code clause/music player/Pictures/4.jpg' },
+                { name: 'Cannot buy me loving', src: 'E:/code clause/music player/album/Can_t_Buy_Me_Loving___La_La_La(48k).mp3', image: 'E:/code clause/music player/Pictures/5.jpg' },
+                { name: 'Excuses', src: 'E:/code clause/music player/album/Excuses_(Official_Video)__AP_Dhillon__Gurinder_Gill__Intense(48k).mp3', image: 'E:/code clause/music player/Pictures/6.jpg' },
+                { name: 'Fell hurt in love', src: 'E:/code clause/music player/album/Felt_Hurt_In_Love_Mashup__Jubin_Nautiyal,_Darshan_Raval,_Nayab_Khan,_Arijit_Singh__Naresh_Parmar(48k).mp3', image: 'E:/code clause/music player/Pictures/7.jpg' },
+                { name: 'Hope', src: 'E:/code clause/music player/album/Hope(48k).mp3', image: 'E:/code clause/music player/Pictures/8.jpg' },
+                { name: 'Kangana', src: 'E:/code clause/music player/album/Kangana(48k).mp3', image: 'E:/code clause/music player/Pictures/9.jpg' },
+                { name: 'Limitless love mashup', src: 'E:/code clause/music player/album/Limitless_Love_Mashup__Jay_Guldekar__Arijit_Singh__Falak_Tak_Chal_Tujh_Mein_Rab_[Bollywood_LoFi](48k).mp3', image: 'E:/code clause/music player/Pictures/10.jpg' },
+                { name: 'Peaky blinder', src: 'E:/code clause/music player/album/Peaky_Blinder(48k).mp3', image: 'E:/code clause/music player/Pictures/11.jpg' },
+                { name: 'The last ride', src: 'E:/code clause/music player/album/THE_LAST_RIDE_-_Offical_Video___Sidhu_Moose_Wala__Wazir_Patar(48k).mp3', image: 'E:/code clause/music player/Pictures/12.jpg' },
+                { name: 'The valentine mashup', src: 'E:/code clause/music player/album/The_Valentine_Mashup_2022__Romantic_Chillout__Harnoor,_Atif,_Yasser_Dasei,_Arijit__BICKY_OFFICIAL(48k).mp3', image: 'E:/code clause/music player/Pictures/13.jpg' },
+                { name: 'Wallian', src: 'E:/code clause/music player/album/Waalian_X_Chan_Vekhya(48k) - Copy.mp3', image: 'E:/code clause/music player/Pictures/14.jpg' },
+                { name: 'XXXTENTACTION', src: 'E:/code clause/music player/album/XXXTENTACION_-_changes(48k).mp3', image: 'E:/code clause/music player/Pictures/15.jpg' },
+                // Add more songs as needed
+            ];
+
+            const playlist = document.getElementById('playlist');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const songDetailsContainer = document.getElementById('songDetails');
+            const songcontrol = document.getElementById('control');
+            const playButton = document.getElementById('playButton');
+            const pauseButton = document.getElementById('pauseButton');
+            const downplaylist = document.getElementById('downplaylist');
+            const bar = document.getElementById('bar');
+            const closer = document.getElementById('closer');
+            const playButtonmob = document.getElementById('playButton1');
+            const pauseButtonmob = document.getElementById('pauseButton1');
+            let currentPlayingIndex = null;
+
+            playButtonmob.style.display = 'none';
+            pauseButtonmob.addEventListener('click', () => {
+                pauseButtonmob.style.display = 'none';
+                playButtonmob.style.display = 'block';
+            })
+            playButtonmob.addEventListener('click', () => {
+                pauseButtonmob.style.display = 'block';
+                playButtonmob.style.display = 'none';
+            })
+            function createbars(closeButton) {
+                closeButton.addEventListener('click', () => {
+                    bar.style.display = 'block';
+                });
+            }
+
+
+            let currentlyPlayingItem = null;
+            let currentlyPlayingindex = null;
+            function togglePlaylist() {
+                downplaylist.innerHTML = '';
+
+                // Create a close button
+                const closeButton = document.createElement('button');
+                closeButton.textContent = 'X';
+                closeButton.addEventListener('click', () => {
+                    togglePlaylist();
+                });
+                createbars(closeButton);
+                bar.style.display = 'none';
+                // Set styles for the close button
+                closeButton.style.position = 'absolute';
+                closeButton.style.background = 'none';
+                closeButton.style.border = 'none';
+                closeButton.style.cursor = 'pointer';
+                closeButton.style.padding = '0';
+                closeButton.style.fontSize = '24px';
+                closeButton.style.color = '#fff';
+
+                // Adding the "close" icon (three horizontal lines) to the closeButton
+                const closeIcon = document.createElement('i');
+                closeIcon.className = 'fa-solid fa-bars'; // Assuming you have a class for the close icon
+                closeIcon.style.display = 'block';
+                closeIcon.style.width = '24px';
+                closeIcon.style.height = '1px';
+                closeIcon.style.backgroundColor = 'currentColor';
+                closeIcon.style.margin = '6px 0';
+                closeButton.style.position = 'absolute';
+                closeButton.style.top = '10px'; // Adjust the distance from the top
+                closeButton.style.right = '10px'; // Adjust the distance from the right
+                closeButton.style.zIndex = '1000'; // Adjust the z-index if needed
+
+                // Append the close button to the playlist container
+                downplaylist.appendChild(closeButton);
+
+                playlistData.forEach((song, index) => {
+                    const listItem = document.createElement('div');
+                    listItem.classList.add('song-item');
+
+                    // Create an img element for the song image
+                    const imgElement = document.createElement('img');
+                    imgElement.src = song.image;
+                    imgElement.alt = 'Song Image';
+                    imgElement.style.width = '50px'; // Adjust the width as needed
+
+                    // Create a span element for the song name
+                    const spanElement = document.createElement('span');
+                    spanElement.textContent = song.name;
+
+                    // Add click event to play the song
+                    listItem.addEventListener('click', () => {
+                        handlePlaylistItemClick(index, listItem, 'downplaylist');
+                    });
+
+                    // Append the img and span elements to the playlist item
+                    listItem.appendChild(imgElement);
+                    listItem.appendChild(spanElement);
+
+                    // Append the playlist item to the playlist
+                    downplaylist.appendChild(listItem);
+                });
+
+                downplaylist.classList.toggle('show');
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            playlistData.forEach((song, index) => {
+                const listItem = document.createElement('div');
+                listItem.classList.add('song-item');
+                listItem.innerHTML = `
+            <img src="${song.image}" alt="Song Image">
+            <span>${song.name}</span>
+        `;
+                listItem.addEventListener('click', () => {
+                    if (currentPlayingIndex !== null) {
+                        const currentlyPlayingItem = playlist.children[currentPlayingIndex];
+                        currentlyPlayingItem.classList.remove('playing');
+                    }
+                    loadSong(index);
+                    listItem.classList.add('playing');
+                    currentPlayingIndex = index;
+
+                    // Display song details on the right side
+                    displaySongDetails(song);
+                });
+                playlist.appendChild(listItem);
+            });
+
+            function togglePlayPause() {
+                if (audioPlayer.paused) {
+                    audioPlayer.play();
+                    playButton.style.display = 'none';
+                    pauseButton.style.display = 'inline-block';
+                } else {
+                    audioPlayer.pause();
+                    playButton.style.display = 'inline-block';
+                    pauseButton.style.display = 'none';
+                }
+            }
+            function prevSong(playlistType) {
+                if(playButtonmob.style.display==='block'||playButton.style.display==='block')
+                {
+                    pauseButtonmob.style.display='block';
+                    playButtonmob.style.display='none';
+                    pauseButton.style.display='block';
+                    playButtonmob.style.display='none';
+                }
+                if (playlistType === 'downplaylist' && currentlyPlayingindex !== null) {
+                    const prevIndex = (currentlyPlayingindex - 1+playlistData.length) % playlistData.length;
+                    const prevItem = downplaylist.children[prevIndex];
+                    handlePlaylistItemClick(prevIndex, prevItem, 'downplaylist');
+                } else if (playlistType === 'playlist' && currentPlayingIndex !== null) {
+                    const prevIndex = (currentPlayingIndex - 1+playlistData.length) % playlistData.length;
+                    const prevItem = playlist.children[prevIndex];
+                    handlePlaylistItemClick(prevIndex, prevItem, 'playlist');
+                }
+            }
+
+            function nextSong(playlistType) {
+                if(playButtonmob.style.display==='block'||playButton.style.display==='block')
+                {
+                    pauseButtonmob.style.display='block';
+                    playButtonmob.style.display='none';
+                    pauseButton.style.display='block';
+                    playButtonmob.style.display='none';
+                }
+                if (playlistType === 'downplaylist' && currentlyPlayingindex !== null) {
+                    const nextIndex = (currentlyPlayingindex + 1+playlistData.length) % playlistData.length;
+                    const nextItem = downplaylist.children[nextIndex];
+                    handlePlaylistItemClick(nextIndex, nextItem, 'downplaylist');
+                } else if (playlistType === 'playlist' && currentPlayingIndex !== null) {
+                    const nextIndex = (currentPlayingIndex + 1+playlistData.length) % playlistData.length;
+                    const nextItem = playlist.children[nextIndex];
+                    handlePlaylistItemClick(nextIndex, nextItem, 'playlist');
+                }
+            }
+
+
+            function handlePlaylistItemClick(index, item, playlistType) {
+                // Update currentlyPlayingItem and currentlyPlayingIndex based on the playlistType
+                if (playlistType === 'downplaylist') {
+                    currentlyPlayingItem = item;
+                    currentlyPlayingindex = index;
+                    currentPlayingIndex = index;
+                } else {
+                    currentlyPlayingItem = null; // Reset currentlyPlayingItem for the playlist
+                    currentPlayingIndex = index;
+                }
+
+                // Remove 'playing' class from both downplaylist and playlist
+                downplaylist.querySelectorAll('.song-item').forEach(listItem => listItem.classList.remove('playing'));
+                playlist.querySelectorAll('.song-item').forEach(listItem => listItem.classList.remove('playing'));
+
+                // Add 'playing' class to the current song in the down playlist
+                item.classList.add('playing');
+
+                // Add 'playing' class to the corresponding playlist item if it's not the downplaylist
+                if (playlistType !== 'downplaylist') {
+                    const correspondingPlaylistItem = playlist.children[index];
+                    correspondingPlaylistItem.classList.add('playing');
+                }
+
+                loadSong(index);
+                displaySongDetails(playlistData[index]);
+            }
+
+
+            function loadSong(index) {
+                const selectedSong = playlistData[index];
+                audioPlayer.src = selectedSong.src;
+                audioPlayer.load();
+                audioPlayer.play();
+            }
+            function displaySongDetails(song) {
+                songDetailsContainer.innerHTML = `
+            <img src="${song.image}" alt="Song Image">
+            <p>${song.name}</p>
+        `;
+            }
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const notification = document.getElementById('notification');
+                showNotification('Select music from playlist', 5000); // Show for 55 seconds
+            });
+
+            function showNotification(message, duration) {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.style.display = 'block';
+
+                setTimeout(function () {
+                    notification.style.display = 'none';
+                }, duration);
+            }
+        </script>
+</body>
+
+</html>

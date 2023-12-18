@@ -1,0 +1,128 @@
+body{
+    background-color: #ff564c;
+}
+.main-container
+{
+    background-color: #141414;
+    width: 45%;
+    text-align: center;
+    border-radius: 9px;
+    color: white;
+    margin-left: 24rem;
+    margin-top: 6rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.music-img{
+    padding: 3rem;
+}
+.music-img img{
+    width: 99%;
+    border-radius: 9px;
+    border-bottom: none;
+    border-left: none;
+}
+.musicname p{
+    font-size: 3rem;
+    margin-top: -2.5rem;
+}
+.singer p{
+    font-size: 1rem;
+    margin-top: -2.5rem;
+}
+.icon {
+    font-size: 24px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: #ffffff;
+}
+.musicbar{
+    display: flex;
+    margin-left: 10rem;
+}
+.alloption
+{
+    display: flex;
+    margin-top: 2rem;
+    margin-left: 4rem;
+    padding: 2rem;
+}
+.menu{
+    display: flex;
+}
+.menubar{
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+.search{
+    margin-left: 27rem;
+    margin-top: 1rem;
+}
+.icon1{
+    font-size: 52px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: #ffffff;
+}
+.icon2{
+    font-size: 35px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: #ffffff;
+}
+.mobile-menu{
+    background-color: aquamarine;
+    border-radius: 20px;
+  display: none;
+   left: 0;
+   bottom: -35%;
+   width: 100%;
+   transition: transform 0.8s ease-in-out;
+}
+.mobile-menu.show{
+    transform: translateX(0);
+    display: block;
+    bottom: 0;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Add transform transition */
+
+}
+li{
+    list-style: none;
+    text-decoration: none;
+}
+
+.search-icon::before {
+    content: '\1F50D'; /* Unicode for magnifying glass */
+}
+
+.menu-icon::before {
+    content: '\2630'; /* Unicode for three horizontal lines */
+}
+
+.heart-icon::before {
+    content: '\2665'; /* Unicode for heart shape */
+}
+
+.left-arrow-icon::before {
+    content: '\2190'; /* Unicode for left arrow */
+    margin-right: 2rem;
+}
+
+.right-arrow-icon::before {
+    content: '\2192'; /* Unicode for right arrow */
+}
+
+.pause-icon::before {
+    content: '\II'; /* Unicode for pause symbol */
+    margin-right: 3.2rem;
+}
+
+.repeat-icon::before {
+    margin-left: 3.2rem;
+    content: '\1F501'; /* Unicode for repeat symbol */
+}
+
+.three-dots-icon::before {
+    margin-left: 3.2rem;
+    content: '\22EF';/* Unicode for three vertical dots */
+}
